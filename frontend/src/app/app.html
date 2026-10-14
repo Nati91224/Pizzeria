@@ -1,0 +1,24 @@
+<div class="franja franja-verde"></div>
+
+<header class="hero">
+  <span class="estrella">✷</span>
+  <div class="logo">
+    <p class="arco">The world of</p>
+    <h1>
+      <span class="pizza">Pizza</span>
+      <span class="luigi">LUIGI</span>
+    </h1>
+    <p class="lema">– A slice of happiness in every bite –</p>
+  </div>
+  <span class="estrella">✷</span>
+</header>
+
+<nav class="menu">
+  <a routerLink="/" routerLinkActive="activo" [routerLinkActiveOptions]="{ exact: true }">Hacer pedido</a>
+  <a routerLink="/admin" routerLinkActive="activo">Administrar menú</a>
+</nav>
+<main>
+  <router-outlet />
+</main>
+
+<div class="franja franja-roja"></div>

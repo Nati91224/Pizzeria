@@ -18,3 +18,14 @@
 .classpath
 .settings/
 target/
+target/
+node_modules/
+dist/
+.angular/
+.idea/
+.vscode/
+.settings/
+.classpath
+.project
+*.iml
+*.log
