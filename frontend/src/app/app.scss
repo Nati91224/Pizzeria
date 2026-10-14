@@ -1,0 +1,78 @@
+.franja {
+  height: 60px;
+  background: repeating-conic-gradient(var(--c) 0% 25%, transparent 0% 50%) 0 0 / 60px 60px;
+}
+.franja-verde { --c: var(--verde); }
+.franja-roja  { --c: var(--rojo); }
+
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 40px 20px;
+}
+
+.logo { text-align: center; }
+
+.arco {
+  margin: 0;
+  color: var(--verde);
+  letter-spacing: 8px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+h1 { margin: 0; line-height: 1; }
+
+.pizza {
+  display: block;
+  font-family: 'Pacifico', cursive;
+  font-size: 5rem;
+  color: var(--rojo);
+  transform: rotate(-6deg);
+  position: relative;
+  z-index: 2;
+  margin-bottom: -35px;
+}
+
+.luigi {
+  display: block;
+  font-family: 'Bowlby One', sans-serif;
+  font-size: 5.5rem;
+  color: var(--verde);
+}
+
+.lema {
+  margin: 10px 0 0;
+  color: var(--rojo);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.estrella { color: var(--verde); font-size: 4rem; }
+
+main { padding: 20px 40px 60px; }
+
+@media (max-width: 700px) {
+  .estrella { display: none; }
+  .pizza { font-size: 3.5rem; }
+  .luigi { font-size: 3.5rem; }
+}
+
+.menu {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 10px;
+
+  a {
+    padding: 8px 20px;
+    border-radius: 999px;
+    border: 2px solid var(--verde);
+    color: var(--verde);
+    text-decoration: none;
+    font-weight: 600;
+
+    &.activo, &:hover { background: var(--verde); color: white; }
+  }
+}

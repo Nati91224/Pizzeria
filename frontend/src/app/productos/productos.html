@@ -1,0 +1,41 @@
+<section class="formulario">
+  <h2 class="titulo">Agregar una pizza</h2>
+
+  <form (ngSubmit)="guardar()">
+    <div class="campo">
+      <label for="nombre">Nombre</label>
+      <input id="nombre" name="nombre" placeholder="Ej: Muzzarella" [(ngModel)]="nuevo.nombre" required>
+    </div>
+
+    <div class="campo">
+      <label for="precio">Precio</label>
+      <input id="precio" name="precio" type="number" min="0" placeholder="Ej: 9500" [(ngModel)]="nuevo.precio" required>
+    </div>
+
+    <div class="campo ancho">
+      <label for="descripcion">Descripción</label>
+      <input id="descripcion" name="descripcion" placeholder="Ej: Salsa, muzzarella y aceitunas" [(ngModel)]="nuevo.descripcion">
+    </div>
+
+    <button type="submit">Guardar pizza 🍕</button>
+  </form>
+
+  @if (mensaje()) {
+    <p class="mensaje">{{ mensaje() }}</p>
+  }
+</section>
+
+<h2 class="titulo grande">Nuestro menú</h2>
+
+<div class="grilla">
+  @for (p of productos(); track p.id) {
+    <article class="tarjeta">
+      <div class="icono">🍕</div>
+      <h3>{{ p.nombre }}</h3>
+      <p class="desc">{{ p.descripcion }}</p>
+      <span class="precio">{{ p.precio | currency:'ARS':'symbol-narrow':'1.0-0' }}</span>
+    </article>
+  } @empty {
+    <p class="vacio">Todavía no hay pizzas en el menú.</p>
+  }
+</div>
