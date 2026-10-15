@@ -14,3 +14,7 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+
+    jwt:
+  secret: clave-secreta-de-prueba-para-pizzeria-con-mas-de-32-caracteres
+  expiracion-ms: 28800000

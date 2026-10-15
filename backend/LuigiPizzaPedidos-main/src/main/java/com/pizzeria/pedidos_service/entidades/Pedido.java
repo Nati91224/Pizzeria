@@ -18,7 +18,7 @@ public class Pedido {
     private String cliente;
     private String direccionEntrega;
     private Double total;
-    private String estado = "PENDIENTE"; // Estado inicial
+    private String estado = "SOLICITADO"; // Estado inicial
     
     public Pedido() {}
 
@@ -26,7 +26,7 @@ public class Pedido {
         this.cliente = cliente;
         this.direccionEntrega = direccionEntrega;
         this.total = total;
-        this.estado = "PENDIENTE";
+        this.estado = "SOLICITADDO";
     }
 
 	public Long getId() {
