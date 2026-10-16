@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: bff-service
+  datasource:
+    url: jdbc:mysql://localhost:3306/pizzeria
+    username: root
+    password: ""
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    open-in-view: false
+
+server:
+  port: 8089
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+pathPedidos: http://localhost:8082/pedidos
+pathProductos: http://localhost:8083/productos

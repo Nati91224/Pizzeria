@@ -1,44 +1,28 @@
 package com.pizzeria.pedidos_service;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Unit test for simple App.
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+ */
+@SpringBootTest
+public class AppTest {
 
-@SpringBootTest */
-public class AppTest
-    extends TestCase
-{
     /**
-     * Create the test case
-     *
-     * @param testName name of the test case
+     * Rigorous Test :-)
      */
-    public AppTest( String testName )
-    {
-        super( testName );
+    @Test
+    public void testApp() {
+        assertTrue(true);
     }
 
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite()
-    {
-        return new TestSuite( AppTest.class );
-    }
-
-    /**
-     * Rigourous Test :-)
-     */
-    public void testApp()
-    {
-        assertTrue( true );
+    @Test
+    public void contextLoads() {
+        // Prueba básica para verificar que el contexto de Spring Boot se levanta
+        // correctamente
+        assertTrue(true);
     }
 }
