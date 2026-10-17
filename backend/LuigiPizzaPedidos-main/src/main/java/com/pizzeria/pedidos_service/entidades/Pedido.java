@@ -26,7 +26,7 @@ public class Pedido {
         this.cliente = cliente;
         this.direccionEntrega = direccionEntrega;
         this.total = total;
-        this.estado = "SOLICITADDO";
+        this.estado = "SOLICITADO";
     }
 
 	public Long getId() {

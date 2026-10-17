@@ -21,9 +21,11 @@ public class DataInitializer {
     }
 
     private void crear(UsuarioRepository repo, PasswordEncoder encoder,
-                       String user, String pass, Rol rol) {
-        if (repo.findByUsername(user).isEmpty()) {
-            repo.save(new Usuario(user, encoder.encode(pass), rol));
-        }
-    }
+                   String user, String pass, Rol rol) {
+    Usuario u = repo.findByUsername(user).orElse(new Usuario());
+    u.setUsername(user);
+    u.setPassword(encoder.encode(pass));
+    u.setRol(rol);
+    repo.save(u);
+}
 }

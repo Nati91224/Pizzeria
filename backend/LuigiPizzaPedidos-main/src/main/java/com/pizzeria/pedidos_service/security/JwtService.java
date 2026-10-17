@@ -16,11 +16,11 @@ public class JwtService {
     private final Key key;
     private final long expiracionMs;
 
-   public JwtService(@Value("${jwt.secret:clave-secreta-de-prueba-para-pizzeria-con-mas-de-32-caracteres}") String secret,
-                  @Value("${jwt.expiracion-ms:28800000}") long expiracionMs) {
-    this.key = Keys.hmacShaKeyFor(secret.getBytes());
-    this.expiracionMs = expiracionMs;
-}
+    public JwtService(@Value("${jwt.secret:clave-secreta-de-prueba-para-pizzeria-con-mas-de-32-caracteres}") String secret,
+                      @Value("${jwt.expiracion-ms:28800000}") long expiracionMs) {
+        this.key = Keys.hmacShaKeyFor(secret.getBytes());
+        this.expiracionMs = expiracionMs;
+    }
 
     public String generarToken(String username, String rol) {
         Date ahora = new Date();

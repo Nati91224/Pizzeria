@@ -3,11 +3,9 @@ package com.pizzeria.pedidos_service.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -15,31 +13,34 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final JwtFilter jwtFilter;
+    private final JwtService jwtService;
 
-    public SecurityConfig(JwtFilter jwtFilter) {
-        this.jwtFilter = jwtFilter;
+    public SecurityConfig(JwtService jwtService) {
+        this.jwtService = jwtService;
+    }
+
+    // Exponer JwtFilter como bean para que Spring lo inyecte donde haga falta
+    @Bean
+    public JwtFilter jwtFilter() {
+        return new JwtFilter(jwtService);
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, JwtFilter jwtFilter) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
             .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-    .requestMatchers("/auth/**").permitAll()
-    .requestMatchers(HttpMethod.POST, "/pedidos/crear").permitAll()
-    .requestMatchers(HttpMethod.DELETE, "/pedidos/**").hasRole("ADMIN")
-    .requestMatchers("/pedidos/**").hasAnyRole("ADMIN", "COCINERO", "REPARTIDOR")
-    .anyRequest().authenticated()
-)
+                .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/pedidos/debug/**").permitAll() // <<-- excepción temporal para debugging
+                .requestMatchers(HttpMethod.POST, "/pedidos/crear").permitAll()
+                .requestMatchers(HttpMethod.DELETE, "/pedidos/**").hasRole("ADMIN")
+                .requestMatchers("/pedidos/**").hasAnyRole("ADMIN", "COCINERO", "REPARTIDOR")
+                .requestMatchers("/error").permitAll()
+                .anyRequest().authenticated()
+            )
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 }
