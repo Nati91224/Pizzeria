@@ -1,25 +1,30 @@
 package com.pizzeria.pedidos_service.entidades;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
-
-@AllArgsConstructor
 public class Pedido {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     private String cliente;
+    private String telefono;
     private String direccionEntrega;
+    @Column(length = 500)
+    private String notas;
     private Double total;
-    private String estado = "SOLICITADO"; // Estado inicial
-    
+    private String estado = "SOLICITADO";
+
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<ItemPedido> items = new ArrayList<>();
+
     public Pedido() {}
 
     public Pedido(String cliente, String direccionEntrega, Double total) {
@@ -28,46 +33,4 @@ public class Pedido {
         this.total = total;
         this.estado = "SOLICITADO";
     }
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getCliente() {
-		return cliente;
-	}
-
-	public void setCliente(String cliente) {
-		this.cliente = cliente;
-	}
-
-	public String getDireccionEntrega() {
-		return direccionEntrega;
-	}
-
-	public void setDireccionEntrega(String direccionEntrega) {
-		this.direccionEntrega = direccionEntrega;
-	}
-
-	public Double getTotal() {
-		return total;
-	}
-
-	public void setTotal(Double total) {
-		this.total = total;
-	}
-
-	public String getEstado() {
-		return estado;
-	}
-
-	public void setEstado(String estado) {
-		this.estado = estado;
-	}
-
-	
 }

@@ -33,7 +33,9 @@ import { PedidoService } from '../services/pedido';
         <div class="card">
           <h3>Editar pedido #{{ e.id }}</h3>
           <input [(ngModel)]="e.cliente" placeholder="Cliente" />
+          <input [(ngModel)]="e.telefono" placeholder="Teléfono" />
           <input [(ngModel)]="e.direccionEntrega" placeholder="Dirección" />
+          <input [(ngModel)]="e.notas" placeholder="Notas" />
           <input type="number" [(ngModel)]="e.total" placeholder="Total" />
           <div class="acciones">
             <button (click)="guardar()">Guardar</button>
@@ -49,7 +51,21 @@ import { PedidoService } from '../services/pedido';
             <span class="estado">{{ p.estado }}</span>
           </div>
           <span>Cliente: {{ p.cliente || 'Sin nombre' }}</span>
+          <span>Teléfono: {{ p.telefono || 'Sin teléfono' }}</span>
           <span>Dirección: {{ p.direccionEntrega || 'Sin dirección' }}</span>
+
+          @if (p.items?.length) {
+            <ul class="items">
+              @for (i of p.items; track $index) {
+                <li>{{ i.cantidad }} x {{ i.nombre }}</li>
+              }
+            </ul>
+          }
+
+          @if (p.notas) {
+            <span class="notas">Notas: {{ p.notas }}</span>
+          }
+
           <span>Total: $ {{ p.total }}</span>
 
           <div class="acciones">
@@ -79,6 +95,8 @@ import { PedidoService } from '../services/pedido';
     .card.CANCELADO { border-left-color: #999; opacity: .7; }
     .cabecera { display: flex; justify-content: space-between; }
     .estado { font-size: .8rem; font-weight: 700; }
+    .items { margin: 4px 0; padding-left: 20px; }
+    .notas { font-style: italic; color: #8a5a00; }
     .acciones { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
     .peligro { color: #b00020; }
     .msg { color: #b00020; }
@@ -147,7 +165,9 @@ export class AdminPedidos implements OnInit {
     if (!p) return;
     this.servicio.actualizar(p.id, {
       cliente: p.cliente,
+      telefono: p.telefono,
       direccionEntrega: p.direccionEntrega,
+      notas: p.notas,
       total: p.total
     }).subscribe({
       next: () => {

@@ -1,9 +1,10 @@
 package com.pizzeria.pedidos_service.service;
 
+import com.pizzeria.pedidos_service.dto.ItemPedidoDTO;
 import com.pizzeria.pedidos_service.dto.PedidoDTO;
+import com.pizzeria.pedidos_service.entidades.ItemPedido;
 import com.pizzeria.pedidos_service.entidades.Pedido;
 import com.pizzeria.pedidos_service.repository.PedidoRepository;
-import com.pizzeria.pedidos_service.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,14 +17,23 @@ public class PedidoServiceImpl implements PedidoService {
     private PedidoRepository pedidoRepository;
 
     @Override
-    public Pedido crearPedido(PedidoDTO pedidoDTO) {
-        Pedido pedido = new Pedido(
-                pedidoDTO.getCliente(),
-                pedidoDTO.getDireccionEntrega(),
-                pedidoDTO.getTotal()
-        );
-        return pedidoRepository.save(pedido);
+public Pedido crearPedido(PedidoDTO dto) {
+    Pedido pedido = new Pedido(dto.getCliente(), dto.getDireccionEntrega(), dto.getTotal());
+    pedido.setTelefono(dto.getTelefono());
+    pedido.setNotas(dto.getNotas());
+    if (dto.getItems() != null) {
+        for (ItemPedidoDTO i : dto.getItems()) {
+            ItemPedido item = new ItemPedido();
+            item.setProductoId(i.getProductoId());
+            item.setNombre(i.getNombre());
+            item.setCantidad(i.getCantidad());
+            item.setPrecioUnitario(i.getPrecioUnitario());
+            item.setPedido(pedido);
+            pedido.getItems().add(item);
+        }
     }
+    return pedidoRepository.save(pedido);
+}
 
     @Override
     public List<Pedido> listarPedidos() {
@@ -48,12 +58,14 @@ public class PedidoServiceImpl implements PedidoService {
         return pedidoRepository.save(pedido); // <-- este save() no genera conflicto
     }
 
-    @Override
-public Pedido actualizarPedido(Long id, PedidoDTO pedidoDTO) {
+   @Override
+public Pedido actualizarPedido(Long id, PedidoDTO dto) {
     Pedido pedido = buscarPorId(id);
-    pedido.setCliente(pedidoDTO.getCliente());
-    pedido.setDireccionEntrega(pedidoDTO.getDireccionEntrega());
-    pedido.setTotal(pedidoDTO.getTotal());
+    pedido.setCliente(dto.getCliente());
+    pedido.setTelefono(dto.getTelefono());
+    pedido.setDireccionEntrega(dto.getDireccionEntrega());
+    pedido.setNotas(dto.getNotas());
+    pedido.setTotal(dto.getTotal());
     return pedidoRepository.save(pedido);
 }
     

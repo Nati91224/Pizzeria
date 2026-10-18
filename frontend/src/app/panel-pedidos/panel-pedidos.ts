@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PedidoService } from '../services/pedido';
 
@@ -18,11 +18,25 @@ import { PedidoService } from '../services/pedido';
 
       @for (p of pedidos(); track p.id) {
         <article class="card">
-          <strong>Pedido #{{ p.id }}</strong>
-          <span>Cliente: {{ p.cliente || 'Sin nombre' }}</span>
-          <span>Direccion: {{ p.direccionEntrega || 'Sin direccion' }}</span>
-          <span>Total: $ {{ p.total }}</span>
-          <button (click)="avanzar(p.id)">{{ textoBoton }}</button>
+         <strong>Pedido #{{ p.id }}</strong>
+  <span>Cliente: {{ p.cliente || 'Sin nombre' }}</span>
+  <span>Teléfono: {{ p.telefono || 'Sin teléfono' }}</span>
+  <span>Dirección: {{ p.direccionEntrega || 'Sin dirección' }}</span>
+
+  @if (p.items?.length) {
+    <ul class="items">
+      @for (i of p.items; track $index) {
+        <li>{{ i.cantidad }} x {{ i.nombre }}</li>
+      }
+    </ul>
+  }
+
+  @if (p.notas) {
+    <span class="notas">Notas: {{ p.notas }}</span>
+  }
+
+  <span>Total: $ {{ p.total }}</span>
+  <button (click)="avanzar(p.id)">{{ textoBoton }}</button>
         </article>
       }
     </section>
@@ -33,9 +47,11 @@ import { PedidoService } from '../services/pedido';
             border-radius: 8px; padding: 12px; margin: 12px 0; }
     .msg { color: #b00020; }
     button { cursor: pointer; padding: 8px 12px; }
+    .items { margin: 4px 0; padding-left: 20px; }
+.notas { font-style: italic; color: #8a5a00; }
   `]
 })
-export class PanelPedidos implements OnInit {
+export class PanelPedidos implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private servicio = inject(PedidoService);
 
@@ -46,16 +62,21 @@ export class PanelPedidos implements OnInit {
 
   pedidos = signal<any[]>([]);
   mensaje = signal('');
+  private timer: any;
 
   ngOnInit() {
-    const d = this.route.snapshot.data;
-    this.titulo = d['titulo'];
-    this.estadoActual = d['estadoActual'];
-    this.estadoSiguiente = d['estadoSiguiente'];
-    this.textoBoton = d['textoBoton'];
-    this.cargar();
-  }
+  const d = this.route.snapshot.data;
+  this.titulo = d['titulo'];
+  this.estadoActual = d['estadoActual'];
+  this.estadoSiguiente = d['estadoSiguiente'];
+  this.textoBoton = d['textoBoton'];
+  this.cargar();
+  this.timer = setInterval(() => this.cargar(), 10000);
+}
 
+ngOnDestroy() {
+  clearInterval(this.timer);
+}
   cargar() {
     this.servicio.listar().subscribe({
       next: lista => {
