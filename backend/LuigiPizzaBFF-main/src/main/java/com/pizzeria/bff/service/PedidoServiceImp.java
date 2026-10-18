@@ -1,3 +1,4 @@
+
 package com.pizzeria.bff.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.pizzeria.bff.dto.PedidoDTO;
 import com.pizzeria.bff.requester.PedidoRequester;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class PedidoServiceImp implements PedidoService {
@@ -24,6 +26,11 @@ public class PedidoServiceImp implements PedidoService {
     }
 
     @Override
+    public ResponseEntity<PedidoDTO> actualizarPedido(Long id, PedidoDTO pedidoDTO, String auth) throws Exception {
+        return pedidoRequester.actualizarPedido(id, pedidoDTO, auth);
+    }
+
+    @Override
     public ResponseEntity<PedidoDTO> actualizarEstado(Long id, String estado, String auth) throws Exception {
         return pedidoRequester.actualizarEstado(id, estado, auth);
     }
@@ -34,7 +41,7 @@ public class PedidoServiceImp implements PedidoService {
     }
 
     @Override
-public ResponseEntity<PedidoDTO> actualizarPedido(Long id, PedidoDTO pedidoDTO, String auth) throws Exception {
-    return pedidoRequester.actualizarPedido(id, pedidoDTO, auth);
-}
+    public ResponseEntity<Map> seguimiento(Long id) throws Exception {
+        return pedidoRequester.seguimiento(id);
+    }
 }

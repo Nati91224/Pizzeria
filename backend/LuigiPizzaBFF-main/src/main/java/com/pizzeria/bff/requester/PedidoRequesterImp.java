@@ -8,6 +8,7 @@ import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import com.pizzeria.bff.dto.PedidoDTO;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class PedidoRequesterImp implements PedidoRequester {
@@ -45,6 +46,23 @@ public class PedidoRequesterImp implements PedidoRequester {
         }
     }
 
+    
+@Override
+public ResponseEntity<PedidoDTO> actualizarPedido(Long id, PedidoDTO pedidoDTO, String auth)
+        throws Exception {
+    try {
+        HttpEntity<PedidoDTO> entity = new HttpEntity<>(pedidoDTO, headers(auth));
+        return restTemplate.exchange(
+                urlPedidos + "/" + id,
+                HttpMethod.PUT,
+                entity,
+                PedidoDTO.class);
+    } catch (HttpStatusCodeException e) {
+        return ResponseEntity.status(e.getStatusCode()).build();
+    }
+}
+
+
     @Override
     public ResponseEntity<PedidoDTO> actualizarEstado(Long id, String estado, String auth) throws Exception {
         try {
@@ -73,16 +91,11 @@ public class PedidoRequesterImp implements PedidoRequester {
     }
 
     @Override
-public ResponseEntity<PedidoDTO> actualizarPedido(Long id, PedidoDTO pedidoDTO, String auth) throws Exception {
-    try {
-        HttpEntity<PedidoDTO> entity = new HttpEntity<>(pedidoDTO, headers(auth));
-        return restTemplate.exchange(
-                urlPedidos + "/" + id,
-                HttpMethod.PUT,
-                entity,
-                PedidoDTO.class);
-    } catch (HttpStatusCodeException e) {
-        return ResponseEntity.status(e.getStatusCode()).build();
+    public ResponseEntity<Map> seguimiento(Long id) throws Exception {
+        try {
+            return restTemplate.exchange(urlPedidos + "/seguimiento/" + id, HttpMethod.GET, null, Map.class);
+        } catch (HttpStatusCodeException e) {
+            return ResponseEntity.status(e.getStatusCode()).build();
+        }
     }
-}
 }

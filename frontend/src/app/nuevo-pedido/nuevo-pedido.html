@@ -1,109 +1,134 @@
+
 @if (confirmado()) {
   <section class="caja exito">
     <div class="grande">🎉</div>
     <h2 class="titulo">¡Pedido enviado!</h2>
-    <p>Gracias {{ cliente.nombre }}, ya estamos preparando tu pizza.</p>
-    <button class="btn" (click)="nuevoPedido()">Hacer otro pedido</button>
+    <p>Gracias {{ cliente.nombre }}, ya recibimos tu pedido.</p>
+
+@if (idPedido() !== null) {
+  <p class="linea total">
+    Número de pedido: #{{ idPedido() }}
+  </p>
+
+  <app-seguimiento
+    [pedidoId]="idPedido()"
+    [mostrarVolver]="false">
+  </app-seguimiento>
+}
+
+    <button class="btn sec" (click)="nuevoPedido()">
+      Hacer otro pedido
+    </button>
   </section>
 } @else {
+  <section class="caja">
+    <h2 class="titulo">Hacé tu pedido</h2>
 
-  <ol class="pasos">
-    <li [class.activo]="paso() === 1" [class.hecho]="paso() > 1"><span>1</span> Tus datos</li>
-    <li [class.activo]="paso() === 2" [class.hecho]="paso() > 2"><span>2</span> Tu pizza</li>
-    <li [class.activo]="paso() === 3"><span>3</span> Confirmar</li>
-  </ol>
+    <div class="pasos">
+      <li [class.activo]="paso() === 1" [class.hecho]="paso() > 1">
+        <span>1</span> Tus datos
+      </li>
+      <li [class.activo]="paso() === 2" [class.hecho]="paso() > 2">
+        <span>2</span> Tu pizza
+      </li>
+      <li [class.activo]="paso() === 3">
+        <span>3</span> Resumen
+      </li>
+    </div>
 
-  @if (paso() === 1) {
-    <section class="caja">
-      <h2 class="titulo">¿Quién hace el pedido?</h2>
-      <form class="form" (ngSubmit)="irAPizzas()">
+    @if (error()) {
+      <p class="error">{{ error() }}</p>
+    }
+
+    @if (paso() === 1) {
+      <h3>Datos del cliente</h3>
+
+      <div class="form">
         <div class="campo">
-          <label for="nombre">Nombre y apellido</label>
-          <input id="nombre" name="nombre" [(ngModel)]="cliente.nombre" placeholder="Ej: Natalia Pérez">
+          <label for="nombre">Nombre</label>
+          <input id="nombre" [(ngModel)]="cliente.nombre" placeholder="Tu nombre" />
         </div>
+
         <div class="campo">
           <label for="telefono">Teléfono</label>
-          <input id="telefono" name="telefono" [(ngModel)]="cliente.telefono" placeholder="Ej: 11 2345 6789">
+          <input id="telefono" type="tel" [(ngModel)]="cliente.telefono" placeholder="Tu teléfono" />
         </div>
+
         <div class="campo ancho">
           <label for="direccion">Dirección de entrega</label>
-          <input id="direccion" name="direccion" [(ngModel)]="cliente.direccion" placeholder="Calle, número, piso/depto">
+          <input id="direccion" [(ngModel)]="cliente.direccion" placeholder="Tu dirección" />
         </div>
+
         <div class="campo ancho">
           <label for="notas">Notas (opcional)</label>
-          <input id="notas" name="notas" [(ngModel)]="cliente.notas" placeholder="Ej: timbre roto, llamar al llegar">
+          <input id="notas" [(ngModel)]="cliente.notas" placeholder="Indicaciones para tu pedido" />
         </div>
-        <button class="btn ancho" type="submit">Elegir mi pizza →</button>
-      </form>
-    </section>
-  }
 
-  @if (paso() === 2) {
-    <h2 class="titulo grande">Elegí tu pizza</h2>
-
-    <div class="grilla">
-      @for (p of productos(); track p.id) {
-        <article class="tarjeta" [class.elegida]="cantidad(p.id) > 0">
-          <div class="icono">🍕</div>
-          <h3>{{ p.nombre }}</h3>
-          <p class="desc">{{ p.descripcion }}</p>
-          <span class="precio">{{ p.precio | currency:'ARS':'symbol-narrow':'1.0-0' }}</span>
-
-          <div class="cantidad">
-            <button type="button" (click)="cambiar(p.id, -1)" [disabled]="cantidad(p.id) === 0">−</button>
-            <strong>{{ cantidad(p.id) }}</strong>
-            <button type="button" (click)="cambiar(p.id, 1)">+</button>
-          </div>
-        </article>
-      } @empty {
-        <p class="vacio">No hay pizzas en el menú todavía.</p>
-      }
-    </div>
-
-    <div class="barra">
-      <span>Total: <strong>{{ total() | currency:'ARS':'symbol-narrow':'1.0-0' }}</strong></span>
-      <div>
-        <button class="btn sec" (click)="volver()">← Volver</button>
-        <button class="btn" (click)="irAResumen()">Ver resumen →</button>
+        <button class="btn ancho" (click)="irAPizzas()">Elegir pizzas</button>
       </div>
-    </div>
-  }
+    }
 
-  @if (paso() === 3) {
-    <section class="caja">
-      <h2 class="titulo">Revisá tu pedido</h2>
+    @if (paso() === 2) {
+      <h3>Elegí tus pizzas</h3>
 
+      <div class="grilla">
+        @for (p of productos(); track p.id) {
+          <article class="tarjeta" [class.elegida]="cantidad(p.id) > 0">
+            <div class="icono">🍕</div>
+            <h3>{{ p.nombre }}</h3>
+            <p class="precio">{{ p.precio | currency:'ARS':'symbol':'1.2-2' }}</p>
+
+            <div class="cantidad">
+              <button type="button" (click)="cambiar(p.id, -1)" [disabled]="cantidad(p.id) === 0">−</button>
+              <strong>{{ cantidad(p.id) }}</strong>
+              <button type="button" (click)="cambiar(p.id, 1)">+</button>
+            </div>
+          </article>
+        } @empty {
+          <p class="vacio">No hay productos disponibles.</p>
+        }
+      </div>
+
+      <div class="acciones">
+        <button class="btn sec" (click)="volver()">Volver</button>
+        <button class="btn" (click)="irAResumen()">Ver resumen</button>
+      </div>
+    }
+
+    @if (paso() === 3) {
       <div class="bloque">
-        <h4>Entrega</h4>
-        <p><strong>{{ cliente.nombre }}</strong> · {{ cliente.telefono }}</p>
-        <p>{{ cliente.direccion }}</p>
-        @if (cliente.notas) { <p class="nota">“{{ cliente.notas }}”</p> }
+        <h4>Datos del cliente</h4>
+        <p><strong>Nombre:</strong> {{ cliente.nombre }}</p>
+        <p><strong>Teléfono:</strong> {{ cliente.telefono }}</p>
+        <p><strong>Dirección:</strong> {{ cliente.direccion }}</p>
+
+        @if (cliente.notas) {
+          <p class="nota">Notas: {{ cliente.notas }}</p>
+        }
       </div>
 
       <div class="bloque">
-        <h4>Pizzas</h4>
-        @for (i of items(); track i.producto.id) {
+        <h4>Tu pedido</h4>
+
+        @for (item of items(); track item.producto.id) {
           <div class="linea">
-            <span>{{ i.cantidad }} × {{ i.producto.nombre }}</span>
-            <span>{{ i.producto.precio * i.cantidad | currency:'ARS':'symbol-narrow':'1.0-0' }}</span>
+            <span>{{ item.cantidad }} x {{ item.producto.nombre }}</span>
+            <span>{{ item.producto.precio * item.cantidad | currency:'ARS':'symbol':'1.2-2' }}</span>
           </div>
         }
+
         <div class="linea total">
           <span>Total</span>
-          <span>{{ total() | currency:'ARS':'symbol-narrow':'1.0-0' }}</span>
+          <span>{{ total() | currency:'ARS':'symbol':'1.2-2' }}</span>
         </div>
       </div>
 
       <div class="acciones">
-        <button class="btn sec" (click)="volver()">← Volver</button>
+        <button class="btn sec" (click)="volver()" [disabled]="enviando()">Volver</button>
         <button class="btn" (click)="confirmar()" [disabled]="enviando()">
-          {{ enviando() ? 'Enviando...' : 'Confirmar pedido ✔' }}
+          {{ enviando() ? 'Enviando...' : 'Confirmar pedido' }}
         </button>
       </div>
-    </section>
-  }
-
-  @if (error()) {
-    <p class="error">{{ error() }}</p>
-  }
+    }
+  </section>
 }

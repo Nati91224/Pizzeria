@@ -3,24 +3,28 @@ import { NuevoPedido } from './nuevo-pedido/nuevo-pedido';
 import { Productos } from './productos/productos';
 import { LoginComponent } from './login/login.component';
 import { PanelPedidos } from './panel-pedidos/panel-pedidos';
-import { AdminPedidos } from './admin-pedidos/admin-pedidos';
+import { Seguimiento } from './seguimiento/seguimiento';
 import { roleGuard } from './guards/auth.guard';
+import { AdminPedidos } from './admin-pedidos/admin-pedidos';
 
 export const routes: Routes = [
   { path: '', component: NuevoPedido },
   { path: 'login', component: LoginComponent },
+  { path: 'pedido/:id', component: Seguimiento },
   {
     path: 'admin',
     component: Productos,
     canActivate: [roleGuard],
     data: { roles: ['ADMIN'] }
   },
+
   {
-    path: 'admin/pedidos',
-    component: AdminPedidos,
-    canActivate: [roleGuard],
-    data: { roles: ['ADMIN'] }
-  },
+  path: 'admin/pedidos',
+  component: AdminPedidos,
+  canActivate: [roleGuard],
+  data: { roles: ['ADMIN'] }
+},
+
   {
     path: 'cocina',
     component: PanelPedidos,

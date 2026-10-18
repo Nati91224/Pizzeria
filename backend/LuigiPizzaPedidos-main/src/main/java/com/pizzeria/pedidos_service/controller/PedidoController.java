@@ -47,4 +47,13 @@ public class PedidoController {
 public ResponseEntity<Pedido> actualizar(@PathVariable Long id, @RequestBody PedidoDTO pedidoDTO) {
     return ResponseEntity.ok(pedidoService.actualizarPedido(id, pedidoDTO));
 }
+
+@GetMapping("/seguimiento/{id}")
+public ResponseEntity<?> seguimiento(@PathVariable Long id) {
+    Pedido p = pedidoService.buscarPorId(id);
+    if (p == null) {
+        return ResponseEntity.notFound().build();
+    }
+    return ResponseEntity.ok(java.util.Map.of("id", p.getId(), "estado", p.getEstado()));
+}
 }

@@ -1,12 +1,15 @@
+
 import { Component, computed, inject, signal } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { ProductoService } from '../services/producto';
 import { PedidoService } from '../services/pedido';
+import { Seguimiento } from '../seguimiento/seguimiento';
 
 @Component({
   selector: 'app-nuevo-pedido',
-  imports: [CurrencyPipe, FormsModule],
+  imports: [CurrencyPipe, FormsModule, RouterLink, Seguimiento],
   templateUrl: './nuevo-pedido.html',
   styleUrl: './nuevo-pedido.scss'
 })
@@ -20,17 +23,29 @@ export class NuevoPedido {
   error = signal('');
   enviando = signal(false);
   confirmado = signal(false);
+  idPedido = signal<number | null>(null);
 
-  cliente = { nombre: '', telefono: '', direccion: '', notas: '' };
+  cliente = {
+    nombre: '',
+    telefono: '',
+    direccion: '',
+    notas: ''
+  };
 
   items = computed(() =>
     this.productos()
       .filter(p => (this.cantidades()[p.id] ?? 0) > 0)
-      .map(p => ({ producto: p, cantidad: this.cantidades()[p.id] }))
+      .map(p => ({
+        producto: p,
+        cantidad: this.cantidades()[p.id]
+      }))
   );
 
   total = computed(() =>
-    this.items().reduce((suma, i) => suma + i.producto.precio * i.cantidad, 0)
+    this.items().reduce(
+      (suma, i) => suma + i.producto.precio * i.cantidad,
+      0
+    )
   );
 
   constructor() {
@@ -51,10 +66,16 @@ export class NuevoPedido {
 
   irAPizzas() {
     const c = this.cliente;
-    if (!c.nombre.trim() || !c.telefono.trim() || !c.direccion.trim()) {
+
+    if (
+      !c.nombre.trim() ||
+      !c.telefono.trim() ||
+      !c.direccion.trim()
+    ) {
       this.error.set('Completá nombre, teléfono y dirección.');
       return;
     }
+
     this.error.set('');
     this.paso.set(2);
   }
@@ -64,6 +85,7 @@ export class NuevoPedido {
       this.error.set('Elegí al menos una pizza.');
       return;
     }
+
     this.error.set('');
     this.paso.set(3);
   }
@@ -74,41 +96,64 @@ export class NuevoPedido {
   }
 
   confirmar() {
+    if (this.enviando()) {
+      return;
+    }
+
     this.enviando.set(true);
     this.error.set('');
 
-    // Si tu PedidoDTO usa otros nombres de campo, se ajusta solo acá.
     const pedido = {
       cliente: this.cliente.nombre,
-  telefono: this.cliente.telefono,
-  direccionEntrega: this.cliente.direccion,
-  notas: this.cliente.notas,
-  total: this.total(),
-  items: this.items().map(i => ({
-    productoId: i.producto.id,
-    nombre: i.producto.nombre,
-    cantidad: i.cantidad,
-    precioUnitario: i.producto.precio
-  }))
+      telefono: this.cliente.telefono,
+      direccionEntrega: this.cliente.direccion,
+      notas: this.cliente.notas,
+      total: this.total(),
+      items: this.items().map(i => ({
+        productoId: i.producto.id,
+        nombre: i.producto.nombre,
+        cantidad: i.cantidad,
+        precioUnitario: i.producto.precio
+      }))
     };
 
     this.pedidoService.crear(pedido).subscribe({
-      next: () => {
+      next: respuesta => {
         this.enviando.set(false);
+
+        if (respuesta?.id == null || !Number.isFinite(Number(respuesta.id))) {
+          this.error.set(
+            'El pedido se envió, pero no recibimos su número. No lo vuelvas a enviar; consultá con el administrador.'
+          );
+          return;
+        }
+
+        this.idPedido.set(Number(respuesta.id));
         this.confirmado.set(true);
       },
       error: err => {
         console.error('Error al crear pedido', err);
         this.enviando.set(false);
-        this.error.set('No se pudo enviar el pedido. Probá de nuevo.');
+        this.error.set(
+          'No se pudo confirmar el pedido. Verificá si se registró antes de volver a enviarlo.'
+        );
       }
     });
   }
 
   nuevoPedido() {
-    this.cliente = { nombre: '', telefono: '', direccion: '', notas: '' };
+    this.cliente = {
+      nombre: '',
+      telefono: '',
+      direccion: '',
+      notas: ''
+    };
+
     this.cantidades.set({});
+    this.idPedido.set(null);
+    this.error.set('');
     this.confirmado.set(false);
+    this.enviando.set(false);
     this.paso.set(1);
   }
 }

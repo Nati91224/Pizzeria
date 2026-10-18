@@ -1,3 +1,4 @@
+
 package com.pizzeria.bff.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import com.pizzeria.bff.dto.PedidoDTO;
 import com.pizzeria.bff.service.PedidoService;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/bff/pedidos")
@@ -25,6 +27,19 @@ public class PedidoController {
         return pedidoService.listarPedidos(auth);
     }
 
+    @PutMapping("/actualizar/{id}")
+    public ResponseEntity<PedidoDTO> actualizar(
+            @PathVariable Long id,
+            @RequestBody PedidoDTO pedidoDTO,
+            @RequestHeader(value = "Authorization", required = false) String auth) throws Exception {
+        return pedidoService.actualizarPedido(id, pedidoDTO, auth);
+    }
+
+    @GetMapping("/seguimiento/{id}")
+    public ResponseEntity<Map> seguimiento(@PathVariable Long id) throws Exception {
+        return pedidoService.seguimiento(id);
+    }
+
     @PutMapping("/estado/{id}")
     public ResponseEntity<PedidoDTO> actualizarEstado(
             @PathVariable Long id,
@@ -39,11 +54,4 @@ public class PedidoController {
             @RequestHeader(value = "Authorization", required = false) String auth) throws Exception {
         return pedidoService.eliminarPedido(id, auth);
     }
-
-    @PutMapping("/actualizar/{id}")
-public ResponseEntity<PedidoDTO> actualizar(@PathVariable Long id,
-        @RequestBody PedidoDTO pedidoDTO,
-        @RequestHeader(value = "Authorization", required = false) String auth) throws Exception {
-    return pedidoService.actualizarPedido(id, pedidoDTO, auth);
-}
 }
