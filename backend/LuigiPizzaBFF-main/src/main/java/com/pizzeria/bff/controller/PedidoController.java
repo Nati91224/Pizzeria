@@ -39,4 +39,11 @@ public class PedidoController {
             @RequestHeader(value = "Authorization", required = false) String auth) throws Exception {
         return pedidoService.eliminarPedido(id, auth);
     }
+
+    @PutMapping("/actualizar/{id}")
+public ResponseEntity<PedidoDTO> actualizar(@PathVariable Long id,
+        @RequestBody PedidoDTO pedidoDTO,
+        @RequestHeader(value = "Authorization", required = false) String auth) throws Exception {
+    return pedidoService.actualizarPedido(id, pedidoDTO, auth);
+}
 }

@@ -17,8 +17,10 @@
   <a routerLink="/" routerLinkActive="activo" [routerLinkActiveOptions]="{ exact: true }">Hacer pedido</a>
 
   @if (rol() === 'ADMIN') {
-    <a routerLink="/admin" routerLinkActive="activo">Administrar menú</a>
-  }
+  <a routerLink="/admin" routerLinkActive="activo" [routerLinkActiveOptions]="{ exact: true }">Administrar menú</a>
+  <a routerLink="/admin/pedidos" routerLinkActive="activo">Pedidos</a>
+}
+  
   @if (rol() === 'COCINERO' || rol() === 'ADMIN') {
     <a routerLink="/cocina" routerLinkActive="activo">Cocina</a>
   }

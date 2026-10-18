@@ -19,6 +19,10 @@ export class PedidoService {
     return this.http.put<any>(`${this.base}/estado/${id}`, null, { params });
   }
 
+  actualizar(id: number, pedido: any) {
+    return this.http.put<any>(`${this.base}/actualizar/${id}`, pedido);
+  }
+
   eliminar(id: number) {
     return this.http.delete<void>(`${this.base}/eliminar/${id}`);
   }

@@ -32,4 +32,9 @@ public class PedidoServiceImp implements PedidoService {
     public ResponseEntity<Void> eliminarPedido(Long id, String auth) throws Exception {
         return pedidoRequester.eliminarPedido(id, auth);
     }
+
+    @Override
+public ResponseEntity<PedidoDTO> actualizarPedido(Long id, PedidoDTO pedidoDTO, String auth) throws Exception {
+    return pedidoRequester.actualizarPedido(id, pedidoDTO, auth);
+}
 }

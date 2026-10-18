@@ -34,6 +34,7 @@ public class SecurityConfig {
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/pedidos/debug/**").permitAll() // <<-- excepción temporal para debugging
                 .requestMatchers(HttpMethod.POST, "/pedidos/crear").permitAll()
+                .requestMatchers(HttpMethod.PUT, "/pedidos/{id}").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/pedidos/**").hasRole("ADMIN")
                 .requestMatchers("/pedidos/**").hasAnyRole("ADMIN", "COCINERO", "REPARTIDOR")
                 .requestMatchers("/error").permitAll()

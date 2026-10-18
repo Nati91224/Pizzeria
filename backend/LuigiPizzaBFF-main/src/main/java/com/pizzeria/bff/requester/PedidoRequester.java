@@ -9,4 +9,5 @@ public interface PedidoRequester {
     ResponseEntity<List> listarPedidos(String auth) throws Exception;
     ResponseEntity<PedidoDTO> actualizarEstado(Long id, String estado, String auth) throws Exception;
     ResponseEntity<Void> eliminarPedido(Long id, String auth) throws Exception;
+    ResponseEntity<PedidoDTO> actualizarPedido(Long id, PedidoDTO pedidoDTO, String auth) throws Exception;
 }

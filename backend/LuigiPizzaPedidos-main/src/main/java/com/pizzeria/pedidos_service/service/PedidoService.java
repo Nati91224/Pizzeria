@@ -11,4 +11,5 @@ public interface PedidoService {
     Pedido buscarPorId(Long id);
     void eliminarPedido(Long id);
     Pedido actualizarEstado(Long id, String nuevoEstado);
+    Pedido actualizarPedido(Long id, PedidoDTO pedidoDTO);
 }

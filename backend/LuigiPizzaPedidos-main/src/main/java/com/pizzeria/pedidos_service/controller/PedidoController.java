@@ -42,4 +42,9 @@ public class PedidoController {
     public ResponseEntity<Pedido> actualizarEstado(@PathVariable Long id, @RequestParam String estado) {
         return ResponseEntity.ok(pedidoService.actualizarEstado(id, estado));
     }
+
+    @PutMapping("/{id}")
+public ResponseEntity<Pedido> actualizar(@PathVariable Long id, @RequestBody PedidoDTO pedidoDTO) {
+    return ResponseEntity.ok(pedidoService.actualizarPedido(id, pedidoDTO));
+}
 }

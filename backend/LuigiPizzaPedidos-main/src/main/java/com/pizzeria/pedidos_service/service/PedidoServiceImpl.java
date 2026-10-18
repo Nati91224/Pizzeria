@@ -47,5 +47,14 @@ public class PedidoServiceImpl implements PedidoService {
         pedido.setEstado(nuevoEstado);
         return pedidoRepository.save(pedido); // <-- este save() no genera conflicto
     }
+
+    @Override
+public Pedido actualizarPedido(Long id, PedidoDTO pedidoDTO) {
+    Pedido pedido = buscarPorId(id);
+    pedido.setCliente(pedidoDTO.getCliente());
+    pedido.setDireccionEntrega(pedidoDTO.getDireccionEntrega());
+    pedido.setTotal(pedidoDTO.getTotal());
+    return pedidoRepository.save(pedido);
+}
     
 }

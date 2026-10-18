@@ -71,4 +71,18 @@ public class PedidoRequesterImp implements PedidoRequester {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    @Override
+public ResponseEntity<PedidoDTO> actualizarPedido(Long id, PedidoDTO pedidoDTO, String auth) throws Exception {
+    try {
+        HttpEntity<PedidoDTO> entity = new HttpEntity<>(pedidoDTO, headers(auth));
+        return restTemplate.exchange(
+                urlPedidos + "/" + id,
+                HttpMethod.PUT,
+                entity,
+                PedidoDTO.class);
+    } catch (HttpStatusCodeException e) {
+        return ResponseEntity.status(e.getStatusCode()).build();
+    }
+}
 }

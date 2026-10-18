@@ -3,6 +3,7 @@ import { NuevoPedido } from './nuevo-pedido/nuevo-pedido';
 import { Productos } from './productos/productos';
 import { LoginComponent } from './login/login.component';
 import { PanelPedidos } from './panel-pedidos/panel-pedidos';
+import { AdminPedidos } from './admin-pedidos/admin-pedidos';
 import { roleGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
@@ -11,6 +12,12 @@ export const routes: Routes = [
   {
     path: 'admin',
     component: Productos,
+    canActivate: [roleGuard],
+    data: { roles: ['ADMIN'] }
+  },
+  {
+    path: 'admin/pedidos',
+    component: AdminPedidos,
     canActivate: [roleGuard],
     data: { roles: ['ADMIN'] }
   },
