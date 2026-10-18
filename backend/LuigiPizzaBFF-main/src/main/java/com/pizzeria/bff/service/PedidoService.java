@@ -6,7 +6,7 @@ import com.pizzeria.bff.dto.PedidoDTO;
 
 public interface PedidoService {
     ResponseEntity<PedidoDTO> crearPedido(PedidoDTO pedidoDTO) throws Exception;
-    ResponseEntity<List> listarPedidos() throws Exception;
-    ResponseEntity<PedidoDTO> actualizarEstado(Long id, String estado) throws Exception;
-    ResponseEntity<Void> eliminarPedido(Long id) throws Exception;
+    ResponseEntity<List> listarPedidos(String auth) throws Exception;
+    ResponseEntity<PedidoDTO> actualizarEstado(Long id, String estado, String auth) throws Exception;
+    ResponseEntity<Void> eliminarPedido(Long id, String auth) throws Exception;
 }

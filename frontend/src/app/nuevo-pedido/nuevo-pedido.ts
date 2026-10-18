@@ -79,17 +79,10 @@ export class NuevoPedido {
 
     // Si tu PedidoDTO usa otros nombres de campo, se ajusta solo acá.
     const pedido = {
-      nombreCliente: this.cliente.nombre,
-      telefono: this.cliente.telefono,
-      direccion: this.cliente.direccion,
-      notas: this.cliente.notas,
-      estado: 'SOLICITADO',
-      total: this.total(),
-      items: this.items().map(i => ({
-        productoId: i.producto.id,
-        cantidad: i.cantidad,
-        precioUnitario: i.producto.precio
-      }))
+      cliente: this.cliente.nombre,
+  direccionEntrega: this.cliente.direccion,
+  total: this.total(),
+  estado: 'SOLICITADO'
     };
 
     this.pedidoService.crear(pedido).subscribe({

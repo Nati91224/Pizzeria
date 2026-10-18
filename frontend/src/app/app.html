@@ -15,8 +15,24 @@
 
 <nav class="menu">
   <a routerLink="/" routerLinkActive="activo" [routerLinkActiveOptions]="{ exact: true }">Hacer pedido</a>
-  <a routerLink="/admin" routerLinkActive="activo">Administrar menú</a>
+
+  @if (rol() === 'ADMIN') {
+    <a routerLink="/admin" routerLinkActive="activo">Administrar menú</a>
+  }
+  @if (rol() === 'COCINERO' || rol() === 'ADMIN') {
+    <a routerLink="/cocina" routerLinkActive="activo">Cocina</a>
+  }
+  @if (rol() === 'REPARTIDOR' || rol() === 'ADMIN') {
+    <a routerLink="/reparto" routerLinkActive="activo">Reparto</a>
+  }
+
+  @if (logueado()) {
+    <a href="#" (click)="salir(); $event.preventDefault()">Cerrar sesión</a>
+  } @else {
+    <a routerLink="/login" routerLinkActive="activo">Iniciar sesión</a>
+  }
 </nav>
+
 <main>
   <router-outlet />
 </main>

@@ -20,16 +20,23 @@ public class PedidoController {
     }
 
     @GetMapping("/listar")
-    public ResponseEntity<List> listar() throws Exception {
-        return pedidoService.listarPedidos();
+    public ResponseEntity<List> listar(
+            @RequestHeader(value = "Authorization", required = false) String auth) throws Exception {
+        return pedidoService.listarPedidos(auth);
     }
 
     @PutMapping("/estado/{id}")
-    public ResponseEntity<PedidoDTO> actualizarEstado(@PathVariable Long id, @RequestParam String estado) throws Exception {
-        return pedidoService.actualizarEstado(id, estado);
+    public ResponseEntity<PedidoDTO> actualizarEstado(
+            @PathVariable Long id,
+            @RequestParam String estado,
+            @RequestHeader(value = "Authorization", required = false) String auth) throws Exception {
+        return pedidoService.actualizarEstado(id, estado, auth);
     }
+
     @DeleteMapping("/eliminar/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Long id) throws Exception {
-        return pedidoService.eliminarPedido(id); // 204 / 404 / 500 según MS
+    public ResponseEntity<Void> eliminar(
+            @PathVariable Long id,
+            @RequestHeader(value = "Authorization", required = false) String auth) throws Exception {
+        return pedidoService.eliminarPedido(id, auth);
     }
 }

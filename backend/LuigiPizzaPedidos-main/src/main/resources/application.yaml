@@ -1,21 +1,27 @@
-server:
-  port: 8082
-  config:
-    import: optional:configserver:http://localhost:8888
-
 spring:
   application:
-    name: Pedidos
+    name: pedidos-service
+  cloud:
+    compatibility-verifier:
+      enabled: false
   datasource:
-    url: jdbc:mysql://localhost:3306/pedidos?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost:3306/pedidos
     username: root
-    password:
+    password: ""
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
+    open-in-view: false
 
-jwt:
-  secret: clave-secreta-de-prueba-para-pizzeria-con-mas-de-32-caracteres
-  expiracion-ms: 28800000
+server:
+  port: 8082
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+pathPedidos: http://localhost:8082/pedidos
+pathProductos: http://localhost:8083/productos

@@ -1,6 +1,4 @@
 {
-  "/bff": {
-    "target": "http://localhost:8085",
-    "secure": false
-  }
+  "/bff":  { "target": "http://localhost:8085", "secure": false, "changeOrigin": true },
+  "/auth": { "target": "http://localhost:8085", "secure": false, "changeOrigin": true }
 }

@@ -8,8 +8,18 @@ spring:
     gateway:
       server:
         webmvc:
+          globalcors:
+            cors-configurations:
+              '[/**]':
+                allowedOrigins: "http://localhost:4200"
+                allowedMethods: "*"
+                allowedHeaders: "*"
           routes:
             - id: bff
-              uri: http://localhost:8083
+              uri: http://localhost:8089
               predicates:
                 - Path=/bff/**
+            - id: auth
+              uri: http://localhost:8082
+              predicates:
+                - Path=/auth/**

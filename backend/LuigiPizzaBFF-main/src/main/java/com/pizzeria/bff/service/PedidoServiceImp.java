@@ -19,16 +19,17 @@ public class PedidoServiceImp implements PedidoService {
     }
 
     @Override
-    public ResponseEntity<List> listarPedidos() throws Exception {
-        return pedidoRequester.listarPedidos();
+    public ResponseEntity<List> listarPedidos(String auth) throws Exception {
+        return pedidoRequester.listarPedidos(auth);
     }
 
     @Override
-    public ResponseEntity<PedidoDTO> actualizarEstado(Long id, String estado) throws Exception {
-        return pedidoRequester.actualizarEstado(id, estado);
+    public ResponseEntity<PedidoDTO> actualizarEstado(Long id, String estado, String auth) throws Exception {
+        return pedidoRequester.actualizarEstado(id, estado, auth);
     }
-	@Override
-	public ResponseEntity<Void> eliminarPedido(Long id) throws Exception {
-		return pedidoRequester.eliminarPedido(id);
-	}
+
+    @Override
+    public ResponseEntity<Void> eliminarPedido(Long id, String auth) throws Exception {
+        return pedidoRequester.eliminarPedido(id, auth);
+    }
 }

@@ -10,3 +10,34 @@ body {
   font-family: 'Poppins', sans-serif;
   color: #333;
 }
+
+.login-card {
+  max-width: 360px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: #fff;
+  border: 3px solid #1b7a4b;
+  border-radius: 16px;
+
+  h2 { text-align: center; color: #1b7a4b; }
+  label { display: block; font-weight: 600; margin-bottom: .25rem; }
+  input {
+    width: 100%;
+    padding: .6rem .8rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-sizing: border-box;
+  }
+  button {
+    width: 100%;
+    padding: .7rem;
+    background: #ee3b14;
+    color: #fff;
+    border: 0;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .error { color: #c0392b; margin-bottom: 1rem; }
+}

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import com.pizzeria.bff.dto.PedidoDTO;
 import java.util.List;
@@ -20,6 +21,14 @@ public class PedidoRequesterImp implements PedidoRequester {
         this.restTemplate = builder.build();
     }
 
+    private HttpHeaders headers(String auth) {
+        HttpHeaders headers = new HttpHeaders();
+        if (auth != null && !auth.isBlank()) {
+            headers.set(HttpHeaders.AUTHORIZATION, auth);
+        }
+        return headers;
+    }
+
     @Override
     public ResponseEntity<PedidoDTO> crearPedido(PedidoDTO pedidoDTO) throws Exception {
         HttpEntity<PedidoDTO> entity = new HttpEntity<>(pedidoDTO);
@@ -27,28 +36,39 @@ public class PedidoRequesterImp implements PedidoRequester {
     }
 
     @Override
-    public ResponseEntity<List> listarPedidos() throws Exception {
-        return restTemplate.exchange(urlPedidos + "/listar", HttpMethod.GET, null, List.class);
+    public ResponseEntity<List> listarPedidos(String auth) throws Exception {
+        try {
+            HttpEntity<Void> entity = new HttpEntity<>(headers(auth));
+            return restTemplate.exchange(urlPedidos + "/listar", HttpMethod.GET, entity, List.class);
+        } catch (HttpStatusCodeException e) {
+            return ResponseEntity.status(e.getStatusCode()).build();
+        }
     }
 
     @Override
-    public ResponseEntity<PedidoDTO> actualizarEstado(Long id, String estado) throws Exception {
-        return restTemplate.exchange(
-                urlPedidos + "/actualizar/" + id + "?estado=" + estado,
-                HttpMethod.PUT,
-                null,
-                PedidoDTO.class);
-    }
-    @Override
-    public ResponseEntity<Void> eliminarPedido(Long id) {
+    public ResponseEntity<PedidoDTO> actualizarEstado(Long id, String estado, String auth) throws Exception {
         try {
-            String url = urlPedidos + "/" + id; // idéntico al MS
-            restTemplate.exchange(url, HttpMethod.DELETE, null, Void.class);
-            return ResponseEntity.noContent().build(); // 204 si OK
-        } catch (org.springframework.web.client.HttpClientErrorException.NotFound e) {
-            return ResponseEntity.notFound().build(); // 404 si no existe
+            HttpEntity<Void> entity = new HttpEntity<>(headers(auth));
+            return restTemplate.exchange(
+                    urlPedidos + "/" + id + "/estado?estado=" + estado,
+                    HttpMethod.PUT,
+                    entity,
+                    PedidoDTO.class);
+        } catch (HttpStatusCodeException e) {
+            return ResponseEntity.status(e.getStatusCode()).build();
+        }
+    }
+
+    @Override
+    public ResponseEntity<Void> eliminarPedido(Long id, String auth) {
+        try {
+            HttpEntity<Void> entity = new HttpEntity<>(headers(auth));
+            restTemplate.exchange(urlPedidos + "/" + id, HttpMethod.DELETE, entity, Void.class);
+            return ResponseEntity.noContent().build();
+        } catch (HttpStatusCodeException e) {
+            return ResponseEntity.status(e.getStatusCode()).build();
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // 500 otro error
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 }
