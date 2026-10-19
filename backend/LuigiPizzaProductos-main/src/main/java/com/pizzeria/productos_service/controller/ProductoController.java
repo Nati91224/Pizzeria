@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/productos")
-@CrossOrigin(origins = "http://localhost:4200") // <--- ¡Añadido aquí para permitir la conexión con Angular!
+@CrossOrigin(origins = "http://localhost:4200")
 public class ProductoController {
 
     @Autowired

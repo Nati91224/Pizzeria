@@ -21,8 +21,7 @@ public class AppTest {
 
     @Test
     public void contextLoads() {
-        // Prueba básica para verificar que el contexto de Spring Boot se levanta
-        // correctamente
+       
         assertTrue(true);
     }
 }

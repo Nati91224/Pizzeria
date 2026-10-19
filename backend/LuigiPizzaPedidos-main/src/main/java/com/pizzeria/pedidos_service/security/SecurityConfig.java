@@ -39,19 +39,18 @@ public class SecurityConfig {
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/error").permitAll()
 
-                // Crear pedidos sin iniciar sesiÃ³n
+                
                 .requestMatchers(
                     HttpMethod.POST,
                     "/pedidos/crear"
                 ).permitAll()
 
-                // Consultar el seguimiento sin iniciar sesiÃ³n
+                
                 .requestMatchers(
                     HttpMethod.GET,
                     "/pedidos/seguimiento/**"
                 ).permitAll()
 
-                // Editar y eliminar pedidos: solo ADMIN
                 .requestMatchers(
                     HttpMethod.PUT,
                     "/pedidos/{id}"
@@ -62,10 +61,10 @@ public class SecurityConfig {
                     "/pedidos/**"
                 ).hasRole("ADMIN")
 
-                // Verificacion de admin (la usa el BFF)
+                
                 .requestMatchers(HttpMethod.GET, "/pedidos/verificar-admin").hasRole("ADMIN")
 
-                // Resto de las operaciones de pedidos
+                
                 .requestMatchers("/pedidos/**")
                 .hasAnyRole("ADMIN", "COCINERO", "REPARTIDOR")
 
