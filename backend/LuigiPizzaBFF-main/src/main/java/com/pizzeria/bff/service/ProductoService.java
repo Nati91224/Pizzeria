@@ -7,4 +7,5 @@ import com.pizzeria.bff.dto.ProductoDTO;
 public interface ProductoService {
     ResponseEntity<ProductoDTO> crearProducto(ProductoDTO productoDTO) throws Exception;
     ResponseEntity<List> listarProductos() throws Exception;
+    ResponseEntity<Void> eliminarProducto(Long id, String auth) throws Exception;
 }

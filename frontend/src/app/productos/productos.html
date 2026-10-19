@@ -33,7 +33,7 @@
       <div class="icono">🍕</div>
       <h3>{{ p.nombre }}</h3>
       <p class="desc">{{ p.descripcion }}</p>
-      <span class="precio">{{ p.precio | currency:'ARS':'symbol-narrow':'1.0-0' }}</span>
+      <div class="pie"><div class="pie"><span class="precio">{{ p.precio | currency:'ARS':'symbol-narrow':'1.0-0' }}</span><button type="button" class="eliminar" (click)="eliminar(p.id)">Eliminar</button></div></div>
     </article>
   } @empty {
     <p class="vacio">Todavía no hay pizzas en el menú.</p>

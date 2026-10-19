@@ -22,4 +22,9 @@ public class ProductoServiceImp implements ProductoService {
     public ResponseEntity<List> listarProductos() throws Exception {
         return productoRequester.listarProductos();
     }
+
+    @Override
+    public ResponseEntity<Void> eliminarProducto(Long id, String auth) throws Exception {
+        return productoRequester.eliminarProducto(id, auth);
+    }
 }

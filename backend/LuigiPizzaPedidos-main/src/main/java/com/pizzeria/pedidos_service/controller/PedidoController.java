@@ -56,4 +56,9 @@ public ResponseEntity<?> seguimiento(@PathVariable Long id) {
     }
     return ResponseEntity.ok(java.util.Map.of("id", p.getId(), "estado", p.getEstado()));
 }
+
+    @GetMapping("/verificar-admin")
+    public ResponseEntity<Void> verificarAdmin() {
+        return ResponseEntity.ok().build();
+    }
 }

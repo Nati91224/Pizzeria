@@ -44,4 +44,17 @@ export class Productos {
       }
     });
   }
+      eliminar(id: number) {
+      if (!confirm('¿Eliminar esta pizza del menú?')) return;
+      this.service.eliminar(id).subscribe({
+        next: () => {
+          this.mensaje.set('Producto eliminado ✔');
+          this.cargar();
+        },
+        error: err => {
+          console.error('Error al eliminar producto', err);
+          this.mensaje.set('No se pudo eliminar el producto.');
+        }
+      });
+    }
 }
